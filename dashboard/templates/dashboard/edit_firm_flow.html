@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Flow for {{ firm.name }}</title>
+</head>
+<body>
+    <h1>Edit Flow for {{ firm.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="flow_json">Flow JSON:</label><br>
+        <textarea id="flow_json" name="flow_json" rows="20" cols="80">{{ flow_json }}</textarea><br><br>
+        <input type="submit" value="Save">
+    </form>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <p><a href="{% url 'dashboard_firm_list' %}">Back to Firm List</a></p>
+</body>
+</html> 

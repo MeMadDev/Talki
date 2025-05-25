@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Login</title>
+</head>
+<body>
+    <h1>Login to Dashboard</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="/dashboard/firms/">
+        <input type="submit" value="Login">
+    </form>
+    {% if form.errors %}
+        <p style="color: red;">Invalid username or password.</p>
+    {% endif %}
+</body>
+</html> 

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'firms',
     'chatbridge',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firms List</title>
+</head>
+<body>
+    <div style="text-align: right;">
+        {% if user.is_authenticated %}
+            <form action="{% url 'dashboard_logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" style="background:none;border:none;color:blue;text-decoration:underline;cursor:pointer;">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'dashboard_login' %}">Login</a>
+        {% endif %}
+    </div>
+    <h1>Firms</h1>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Status</th>
+            <th>Edit Flow</th>
+        </tr>
+        {% for firm in firms %}
+        <tr>
+            <td>{{ firm.name }}</td>
+            <td>{{ firm.phone_number }}</td>
+            <td>{{ firm.status|yesno:"Active,Inactive" }}</td>
+            <td><a href="{% url 'edit_firm_flow' firm.id %}">Edit Flow</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No firms found.</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html> 
