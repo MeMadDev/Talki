@@ -64,6 +64,8 @@ def whatsapp_webhook(request):
                         chat_user.current_step,
                         msg_body
                     )
+                    print(f"Next step: {next_step}")
+                    print(f"Response message: {response_message}")
                     
                     if next_step:
                         # Update user's current step
@@ -133,6 +135,7 @@ def send_whatsapp_message(to_number: str, message: str) -> bool:
         bool: True if message was sent successfully, False otherwise
     """
     try:
+        print(f"Sending WhatsApp message to {to_number}: {message}")
         response = requests.post(
             settings.WHATSAPP_API_URL,
             json={

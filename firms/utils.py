@@ -1,5 +1,6 @@
 from .models import Firm, ChatUser
 from typing import Optional, Tuple
+import re
 
 def get_firm_by_phone(phone_number: str) -> Optional[Firm]:
     """
@@ -50,10 +51,17 @@ def get_next_message(firm: Firm, current_step: str, user_input: str) -> Tuple[st
     
     # If next is a list, it's a pattern-based routing
     if isinstance(next_step, list):
-        for pattern in next_step:
-            if pattern.get('pattern') in user_input:
-                next_step_id = pattern.get('next')
-                return next_step_id, get_message_for_step(flow, next_step_id)
+        for pattern_data in next_step:
+            pattern = pattern_data.get('pattern', '')
+            try:
+                if re.match(pattern, user_input.strip()):
+                    next_step_id = pattern_data.get('next')
+                    return next_step_id, get_message_for_step(flow, next_step_id)
+            except re.error:
+                # If pattern is invalid, try direct string matching
+                if pattern == user_input.strip():
+                    next_step_id = pattern_data.get('next')
+                    return next_step_id, get_message_for_step(flow, next_step_id)
     
     return None, "No valid next step found in the flow."
 
