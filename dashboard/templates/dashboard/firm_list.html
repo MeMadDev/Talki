@@ -2,20 +2,66 @@
 <html>
 <head>
     <title>Firms List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f5f5f5;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .logout-button {
+            background: none;
+            border: none;
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 0;
+            font-size: 1em;
+        }
+        .edit-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .edit-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <div style="text-align: right;">
+    <div class="header">
+        <h1>Firms</h1>
         {% if user.is_authenticated %}
             <form action="{% url 'dashboard_logout' %}" method="post" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" style="background:none;border:none;color:blue;text-decoration:underline;cursor:pointer;">Logout</button>
+                <button type="submit" class="logout-button">Logout</button>
             </form>
         {% else %}
             <a href="{% url 'dashboard_login' %}">Login</a>
         {% endif %}
     </div>
-    <h1>Firms</h1>
-    <table border="1">
+    <table>
         <tr>
             <th>Name</th>
             <th>Phone Number</th>
@@ -27,7 +73,7 @@
             <td>{{ firm.name }}</td>
             <td>{{ firm.phone_number }}</td>
             <td>{{ firm.status|yesno:"Active,Inactive" }}</td>
-            <td><a href="{% url 'edit_firm_flow' firm.id %}">Edit Flow</a></td>
+            <td><a href="{% url 'dashboard_edit_firm_flow' firm.id %}" class="edit-link">Edit Flow</a></td>
         </tr>
         {% empty %}
         <tr><td colspan="4">No firms found.</td></tr>

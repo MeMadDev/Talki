@@ -30,7 +30,7 @@ HTML_FORM = '''
 {% endwith %}
 '''
 
-@app.route('/ui', methods=['GET'])
+@app.route('/', methods=['GET'])
 def ui():
     return render_template_string(HTML_FORM)
 

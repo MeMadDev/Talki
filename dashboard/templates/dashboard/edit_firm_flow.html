@@ -2,13 +2,63 @@
 <html>
 <head>
     <title>Edit Flow for {{ firm.name }}</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script>
+        function validateJSON() {
+            var jsonText = editor.getValue();
+            try {
+                JSON.parse(jsonText);
+                alert('Valid JSON!');
+            } catch (e) {
+                alert('Invalid JSON: ' + e.message);
+            }
+        }
+        var editor;
+        document.addEventListener('DOMContentLoaded', function() {
+            editor = ace.edit("editor");
+            editor.setTheme("ace/theme/monokai");
+            editor.session.setMode("ace/mode/json");
+            editor.setValue(`{{ flow_json|escapejs }}`, -1);
+            var textarea = document.getElementById('flow_json');
+            editor.getSession().on("change", function() {
+                textarea.value = editor.getSession().getValue();
+            });
+        });
+        function loadSampleJSON() {
+            var sampleJSON = {
+                "steps": [
+                    {
+                        "id": "step1",
+                        "message": "Welcome to our service!",
+                        "next": "step2"
+                    },
+                    {
+                        "id": "step2",
+                        "message": "How can we assist you today?",
+                        "next": "step3"
+                    }
+                ]
+            };
+            editor.setValue(JSON.stringify(sampleJSON, null, 2), -1);
+        }
+    </script>
+    <style>
+        #editor {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <h1>Edit Flow for {{ firm.name }}</h1>
     <form method="post">
         {% csrf_token %}
         <label for="flow_json">Flow JSON:</label><br>
-        <textarea id="flow_json" name="flow_json" rows="20" cols="80">{{ flow_json }}</textarea><br><br>
+        <div id="editor"></div>
+        <input type="hidden" id="flow_json" name="flow_json" value="{{ flow_json }}">
+        <br><br>
+        <button type="button" onclick="validateJSON()">Validate JSON</button>
+        <button type="button" onclick="loadSampleJSON()">Load Sample JSON</button>
         <input type="submit" value="Save">
     </form>
     {% if error %}
